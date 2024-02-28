@@ -1,0 +1,7 @@
+C:\Users\zZz\source\repos\bootEditor\bin\Debug\bootEditor.exe.config
+C:\Users\zZz\source\repos\bootEditor\bin\Debug\bootEditor.exe
+C:\Users\zZz\source\repos\bootEditor\bin\Debug\bootEditor.pdb
+C:\Users\zZz\source\repos\bootEditor\obj\Debug\bootEditor.csproj.AssemblyReference.cache
+C:\Users\zZz\source\repos\bootEditor\obj\Debug\bootEditor.csproj.CoreCompileInputs.cache
+C:\Users\zZz\source\repos\bootEditor\obj\Debug\bootEditor.exe
+C:\Users\zZz\source\repos\bootEditor\obj\Debug\bootEditor.pdb
