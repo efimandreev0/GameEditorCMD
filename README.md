@@ -1,6 +1,4 @@
 # Games with full compatibility
-Coropata (DS),\n
-DoomRPG (Java)
+Coropata (DS), DoomRPG (Java)
 # To-do
-Dekotora (DS), \n
-Any other games
+Dekotora (DS), Any other games
