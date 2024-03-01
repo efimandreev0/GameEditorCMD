@@ -43,9 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Java\DoomRPG\STR.cs" />
+    <Compile Include="Nintendo\DS\BMG\BMG.cs" />
     <Compile Include="Nintendo\DS\Coropata\Coropata.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sega\GameGear\Lunara\Lunara.cs" />
+    <Compile Include="Utils\CEGET.cs" />
     <Compile Include="Utils\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -53,6 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Nintendo\DS\BakuosuDekotoraDensestsuBlack\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Nintendo\3DS\SMDH\SMDH.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
