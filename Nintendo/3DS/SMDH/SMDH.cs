@@ -19,11 +19,11 @@ namespace bootEditor.Nintendo._3DS.SMDH
             string[] developer = new string[12];
             for (int i = 0; i < 12; i++)
             {
-                name1[i] = Utils.ReadString(reader, Encoding.Unicode);
+                name1[i] = bootEditor.Utils.Utils.ReadString(reader, Encoding.Unicode);
                 reader.BaseStream.Position += 128 - (Encoding.Unicode.GetBytes(name1[i])).Length - i;
-				name2[i] = Utils.ReadString(reader, Encoding.Unicode);
+				name2[i] = bootEditor.Utils.Utils.ReadString(reader, Encoding.Unicode);
                 reader.BaseStream.Position += 256 - (Encoding.Unicode.GetBytes(name2[i])).Length - i;
-                developer[i] = Utils.ReadString(reader, Encoding.Unicode);
+                developer[i] = bootEditor.Utils.Utils.ReadString(reader, Encoding.Unicode);
                 reader.BaseStream.Position += 128 - (Encoding.Unicode.GetBytes(developer[i])).Length - i;
             }
         }

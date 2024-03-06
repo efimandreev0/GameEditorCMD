@@ -6,10 +6,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace bootEditor
+namespace bootEditor.Utils
 {
     public static class Utils
     {
+        public static int FindBytes(byte[] fileBytes, byte[] bytesToSearch)
+        {
+            int maxPosition = fileBytes.Length - bytesToSearch.Length;
+            for (int i = 0; i <= maxPosition; i++)
+            {
+                bool match = true;
+                for (int j = 0; j < bytesToSearch.Length; j++)
+                {
+                    if (fileBytes[i + j] != bytesToSearch[j])
+                    {
+                        match = false;
+                        break;
+                    }
+                }
+
+                if (match)
+                {
+                    return i;
+                }
+            }
+
+            return -1; // Возвращаем -1, если байты не найдены
+        }
         public static int GetRelativePointerOffset(BinaryReader reader, int offset)
         {
             int result = -1;

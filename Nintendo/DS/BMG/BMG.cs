@@ -35,9 +35,9 @@ namespace bootEditor.Nintendo.DS.BMG
             {
                 reader.BaseStream.Position = position;
                 reader.BaseStream.Position += pos[i];
-                strings[i] = Utils.ReadString(reader, Encoding.Unicode).Replace("\n", "<lf>").Replace("\r", "<br>");
+                strings[i] = bootEditor.Utils.Utils.ReadString(reader, Encoding.Unicode).Replace("\n", "<lf>").Replace("\r", "<br>");
             }
-            File.WriteAllLines("File.txt", strings);
+            File.WriteAllLines(Path.GetFileNameWithoutExtension(file) + ".txt", strings);
         }
     }
 }

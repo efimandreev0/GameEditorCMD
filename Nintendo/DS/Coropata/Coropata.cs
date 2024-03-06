@@ -23,7 +23,7 @@ namespace bootEditor.Nintendo.DS.Coropata
                 reader.BaseStream.Position = 0x26980;
                 int sysPoint = reader.ReadInt32() - 0x2000000;
                 reader.BaseStream.Position = sysPoint;
-                string system = Utils.ReadString(reader, Encoding.GetEncoding("Shift-jis")).Replace("\n\n", "<end>").Replace("\n", "<lf>");
+                string system = bootEditor.Utils.Utils.ReadString(reader, Encoding.GetEncoding("Shift-jis")).Replace("\n\n", "<end>").Replace("\n", "<lf>");
                 Directory.CreateDirectory("Coropata");
                 File.WriteAllText("Coropata" + "\\" + "System.txt", system);
                 reader.BaseStream.Position = 0xB3428;
@@ -33,7 +33,7 @@ namespace bootEditor.Nintendo.DS.Coropata
                     int itemsP = reader.ReadInt32() - 0x2000000;
                     var pos = reader.BaseStream.Position;
                     reader.BaseStream.Position = itemsP;
-                    itemsSTR.Add(Utils.ReadString(reader, Encoding.GetEncoding("Shift-jis")).Replace("\n\n", "<end>").Replace("\n", "<lf>"));
+                    itemsSTR.Add(bootEditor.Utils.Utils.ReadString(reader, Encoding.GetEncoding("Shift-jis")).Replace("\n\n", "<end>").Replace("\n", "<lf>"));
                     reader.BaseStream.Position = pos;
                 }
                 File.WriteAllLines("Coropata" + "\\" + "Items.txt", itemsSTR.ToArray());
@@ -50,7 +50,7 @@ namespace bootEditor.Nintendo.DS.Coropata
                 for (int i = 0; i < levelsP.Count; i++)
                 {
                     reader.BaseStream.Position = levelsP[i];
-                    levelsSTR.Add(Utils.ReadString(reader, Encoding.GetEncoding("Shift-jis")).Replace("\n\n", "<end>").Replace("\n", "<lf>").Replace("\b", "<b>").Replace("\u0010", "<10>"));
+                    levelsSTR.Add(bootEditor.Utils.Utils.ReadString(reader, Encoding.GetEncoding("Shift-jis")).Replace("\n\n", "<end>").Replace("\n", "<lf>").Replace("\b", "<b>").Replace("\u0010", "<10>"));
                 }
                 File.WriteAllLines("Coropata" + "\\" + "Levels.txt", levelsSTR.ToArray());
                 reader.BaseStream.Position = 0x60F64;
@@ -61,7 +61,7 @@ namespace bootEditor.Nintendo.DS.Coropata
                     wifiP.Add(reader.ReadInt32() - 0x2000000);
                     var pos = reader.BaseStream.Position;
                     reader.BaseStream.Position = wifiP[i];
-                    wifiSTR.Add(Utils.ReadString(reader, Encoding.GetEncoding("Shift-jis")).Replace("\n\n", "<end>").Replace("\n", "<lf>").Replace("\b", "<b>").Replace("\u0010", "<10>").Replace("\u0018", "<18>").Replace("\u001e", "<1E>").Replace("\u000e", "<0E>").Replace("\u001a", "<1A>"));
+                    wifiSTR.Add(bootEditor.Utils.Utils.ReadString(reader, Encoding.GetEncoding("Shift-jis")).Replace("\n\n", "<end>").Replace("\n", "<lf>").Replace("\b", "<b>").Replace("\u0010", "<10>").Replace("\u0018", "<18>").Replace("\u001e", "<1E>").Replace("\u000e", "<0E>").Replace("\u001a", "<1A>"));
                     reader.BaseStream.Position = pos;
                 }
                 File.WriteAllLines("Coropata" + "\\" + "wifi.txt", wifiSTR.ToArray());
@@ -73,7 +73,7 @@ namespace bootEditor.Nintendo.DS.Coropata
                     system2P.Add(reader.ReadInt32() - 0x2000000);
                     var pos = reader.BaseStream.Position;
                     reader.BaseStream.Position = system2P[i];
-                    system2STR.Add(Utils.ReadString(reader, Encoding.GetEncoding("Shift-jis")).Replace("\n\n", "<end>").Replace("\n", "<lf>").Replace("\b", "<b>").Replace("\u0010", "<10>").Replace("\u0018", "<18>").Replace("\u001e", "<1E>").Replace("\u000e", "<0E>").Replace("\u001a", "<1A>"));
+                    system2STR.Add(bootEditor.Utils.Utils.ReadString(reader, Encoding.GetEncoding("Shift-jis")).Replace("\n\n", "<end>").Replace("\n", "<lf>").Replace("\b", "<b>").Replace("\u0010", "<10>").Replace("\u0018", "<18>").Replace("\u001e", "<1E>").Replace("\u000e", "<0E>").Replace("\u001a", "<1A>"));
                     reader.BaseStream.Position = pos;
                 }
                 File.WriteAllLines("Coropata" + "\\" + "system2.txt", system2STR.ToArray());
