@@ -11,54 +11,40 @@ namespace bootEditor.Nintendo._3DS.Pokemon
 {
     internal class SARC
     {
-        public static void ExtractSARC(string inputFilePath, string outputFolderPath)
+        public static void Read(string file)
         {
-            using (FileStream inputFileStream = new FileStream(inputFilePath, FileMode.Open))
+            int position = 0;
+            byte[] bytesToSearch = { 0x53, 0x41, 0x52, 0x43 };
+            // Открываем бинарный файл для чтения в байтовом режиме
+            using (var fileStream = new FileStream(file, FileMode.Open, FileAccess.Read))
             {
-                using (BinaryReader binaryReader = new BinaryReader(inputFileStream))
+                byte[] fileBytes = new byte[fileStream.Length];
+                fileStream.Read(fileBytes, 0, fileBytes.Length);
+
+                // Выполняем поиск указанных байтов
+                position = Utils.Utils.FindBytes(fileBytes, bytesToSearch);
+
+                if (position >= 0)
                 {
-                    string magic = new string(binaryReader.ReadChars(4));
-                    if (magic != "SARC")
-                    {
-                        throw new Exception("Invalid SARC file!");
-                    }
-
-                    binaryReader.ReadUInt16(); // Не используется
-                    ushort headerSize = binaryReader.ReadUInt16();
-                    binaryReader.ReadUInt32(); // Не используется
-
-                    binaryReader.BaseStream.Position = headerSize;
-
-                    if (binaryReader.ReadInt32() != 0xFEFF4143)
-                    {
-                        throw new Exception("Incorrect SARC header!");
-                    }
-
-                    binaryReader.ReadUInt32(); // Не используется
-                    int fileSize = binaryReader.ReadInt32();
-                    int dataOffset = binaryReader.ReadInt32();
-
-                    binaryReader.BaseStream.Position += 8; // Пропускаем заголовок
-
-                    DirectoryInfo outputDirectory = Directory.CreateDirectory(outputFolderPath);
-
-                    while (binaryReader.BaseStream.Position < dataOffset)
-                    {
-                        string fileName = new string(binaryReader.ReadChars(4));
-                        int fileLength = binaryReader.ReadInt32();
-
-                        byte[] fileData = binaryReader.ReadBytes(fileLength);
-
-                        File.WriteAllBytes(Path.Combine(outputDirectory.FullName, fileName), fileData);
-
-                        Console.WriteLine("Извлечен файл: " + fileName);
-                    }
-
-                    Console.WriteLine("SARC архив разобран успешно!");
+                    Console.WriteLine("Байты найдены на позиции {0}", position);
+                }
+                else
+                {
+                    Console.WriteLine("Байты не найдены");
                 }
             }
+            var reader = new BinaryReader(File.OpenRead(file));
+            reader.BaseStream.Position = position;
+            //S
+            int magic = reader.ReadInt32();
+            int headerLen = reader.ReadInt16();
+            int byteOrder = reader.ReadInt16(); //Byte-order marker (0xFEFF = big, 0xFFFE = little)
+            int fileLen = reader.ReadInt32();
+            int dataOffset = reader.ReadInt32() + 0xC + position;
+            reader.ReadInt32(); //unk -- always \x00\x01\x00\x00
+            //SFAT
+            int magicSFAT = reader.ReadInt32();
+            int headerSFAT = reader.ReadInt32();
         }
-
-
     }
 }

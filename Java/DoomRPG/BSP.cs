@@ -13,53 +13,50 @@ namespace bootEditor.Java.DoomRPG
         {
             string nameWithoutExt = Path.GetFileNameWithoutExtension(file);
             var reader = new BinaryReader(File.OpenRead(file));
-            if (nameWithoutExt == "intro")
+            Console.WriteLine(nameWithoutExt);
+            if (file.Contains("intro"))
             {
                 reader.BaseStream.Position = 0x2D1E;
             }
-            if (nameWithoutExt == "junction")
+            if (file.Contains("junction"))
             {
                 reader.BaseStream.Position = 0x1872;
             }
-            if (nameWithoutExt == "junction_destroyed")
+            if (file.Contains("junction_destroyed"))
             {
                 reader.BaseStream.Position = 0x2689;
             }
-            if (nameWithoutExt == "level01")
+            if (file    .Contains("level01"))
             {
                 reader.BaseStream.Position = 0x2719;
             }
-            if (nameWithoutExt == "level02")
+            if (file.Contains("level02"))
             {
                 reader.BaseStream.Position = 0x2F72;
             }
-            if (nameWithoutExt == "level03")
+            if (file    .Contains("level03"))
             {
                 reader.BaseStream.Position = 0x2DED;
             }
-            if (nameWithoutExt == "level04")
+            if (file.Contains("level04"))
             {
                 reader.BaseStream.Position = 0x3452;
             }
-            if (nameWithoutExt == "level05")
+            if (file.Contains("level05"))
             {
                 reader.BaseStream.Position = 0x3C91;
             }
-            if (nameWithoutExt == "level06")
+            if (file.Contains("level06"))
             {
                 reader.BaseStream.Position = 0x3C15;
             }
-            if (nameWithoutExt == "level07")
+            if (file.Contains("level07"))
             {
                 reader.BaseStream.Position = 0x3A75;
             }
-            if (nameWithoutExt == "reactor")
+            if (file.Contains("reactor"))
             {
                 reader.BaseStream.Position = 0x2A1C;
-            }
-            else
-            {
-                Console.WriteLine("This file format is not supported!");
             }
             int count = reader.ReadUInt16();
             string[] strings = new string[count];
@@ -72,57 +69,67 @@ namespace bootEditor.Java.DoomRPG
         }
         public static void Write(string file)
         {
+            //skipping blocks & get ost info
             string[] strings = File.ReadAllLines(file);
             string nameWithoutExt = Path.GetFileNameWithoutExtension(file);
+            var reader = new BinaryReader(File.OpenRead(nameWithoutExt + ".bsp"));
+            var pos = 0;
+            if (file.Contains("intro"))
+            {
+                 pos = 0x2D1E;
+            }
+            if (file.Contains("junction"))
+            {
+                pos = 0x1872;
+            }
+            if (file    .Contains("junction_destroyed"))
+            {
+                pos = 0x2689;
+            }
+            if (file.Contains("level01"))
+            {
+                pos = 0x2719;
+            }
+            if (file    .Contains("level02"))
+            {
+                pos = 0x2F72;
+            }
+            if (file.Contains("level03"))
+            {
+                pos = 0x2DED;
+            }
+            if (file.Contains("level04"))
+            {
+                pos = 0x3452;
+            }
+            if (file.Contains("level05"))
+            {
+                pos = 0x3C91;
+            }
+            if (file.Contains("level06"))
+            {
+                pos = 0x3C15;
+            }
+            if (file.Contains("level07"))
+            {
+                pos = 0x3A75;
+            }
+            if (file.Contains("reactor"))
+            {
+                pos  = 0x2A1C;
+            }
+            reader.BaseStream.Position = pos;
+            int count = reader.ReadUInt16();
+            for (int i = 0; i < count; i++)
+            {
+                int len = reader.ReadInt16();
+                reader.ReadBytes(len);
+            }
+            byte[] bytes = reader.ReadBytes((int)(reader.BaseStream.Length - reader.BaseStream.Position));
+            reader.Close();
+            //writing
             var writer = new BinaryWriter(File.OpenWrite(nameWithoutExt + ".bsp"));
-            if (nameWithoutExt == "intro.bsp")
-            {
-                writer.BaseStream.Position = 0x2D1E;
-            }
-            if (nameWithoutExt == "junction")
-            {
-                writer.BaseStream.Position = 0x1872;
-            }
-            if (nameWithoutExt == "junction_destroyed")
-            {
-                writer.BaseStream.Position = 0x2689;
-            }
-            if (nameWithoutExt == "level01")
-            {
-                writer.BaseStream.Position = 0x2719;
-            }
-            if (nameWithoutExt == "level02")
-            {
-                writer.BaseStream.Position = 0x2F72;
-            }
-            if (nameWithoutExt == "level03")
-            {
-                writer.BaseStream.Position = 0x2DED;
-            }
-            if (nameWithoutExt == "level04")
-            {
-                writer.BaseStream.Position = 0x3452;
-            }
-            if (nameWithoutExt == "level05")
-            {
-                writer.BaseStream.Position = 0x3C91;
-            }
-            if (nameWithoutExt == "level06")
-            {
-                writer.BaseStream.Position = 0x3C15;
-            }
-            if (nameWithoutExt == "level07")
-            {
-                writer.BaseStream.Position = 0x3A75;
-            }
-            if (nameWithoutExt == "reactor")
-            {
-                writer.BaseStream.Position = 0x2A1C;
-            }
-            else
-            {
-                Console.WriteLine("File is not searched in database!");
-            }
+            writer.BaseStream.Position = pos;
             writer.Write((short)strings.Length);
             for (int i = 0; i < strings.Length; i++)
             {
@@ -130,6 +137,8 @@ namespace bootEditor.Java.DoomRPG
                 writer.Write((short)strings[i].Length);
                 writer.Write(Encoding.GetEncoding("Windows-1252").GetBytes(strings[i]));
             }
+            writer.Write(bytes);
+            Console.WriteLine($"File {nameWithoutExt + ".bsp"} was succesfully writed!");
         }
     }
 }
