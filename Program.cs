@@ -16,13 +16,24 @@ namespace bootEditor
         {
             if (args.Length == 0)
             {
-                Console.WriteLine("USAGE: Tool.exe {-e(extract) or -w(write)} {game or format of file} {gamefile}\nSupported Games:\nPaper Mario Sticker Star (3DS)(BIN-image archive) (Command - PMSS)\nCoropata (DS) (Command - Coropata)\nGangstar Vegas (DS) (Command - Gangstar)\nDoomRPG (Java(STR), Brew(BSP)) (Command - DoomRPG)\nDoom II RPG (IOS) (Command - DoomIIRPG)\nJack and Daxter: The precursor Legacy (PC, PS2, PSV) (Command - Legacy)\nHyrule Warriors: Age of Calamity (NSW) (Command - HyruleCalamity)\nSupported files:\nBMG\n");
+                Console.WriteLine("USAGE: Tool.exe {-e(extract) or -w(write)} {game or format of file} {gamefile}\nSupported Games:\nBlaster Master Zero (3DS)(TEXT, ARC) (Command - BMZ. TEXT -t, ARC -a (file.irarc file.irlst))\nPaper Mario Sticker Star (3DS)(BIN-image archive) (Command - PMSS)\nCoropata (DS) (Command - Coropata)\nGangstar Vegas (DS) (Command - Gangstar)\nDoomRPG (Java(STR), Brew(BSP)) (Command - DoomRPG)\nDoom II RPG (IOS) (Command - DoomIIRPG)\nJack and Daxter: The precursor Legacy (PC, PS2, PSV) (Command - Legacy)\nHyrule Warriors: Age of Calamity (NSW) (Command - HyruleCalamity)\nSupported files:\nBMG\n");
                 Console.ReadKey();
             }
             else
             {
                 if (args[0].Contains("-e"))
                 {
+                    if (args[1].Contains("BMZ"))
+                    {
+                        if (args[2].Contains("-t"))
+                        {
+                            Nintendo._3DS.BlasterMasterZero.TEXT.Read(args[3]);
+                        }
+                        if (args[2].Contains("-a"))
+                        {
+                            Nintendo._3DS.BlasterMasterZero.IRARC.Read(args[3], args[4]);
+                        }
+                    }
                     if (args[1].Contains("PMSS"))
                     {
                         FileAttributes attr = File.GetAttributes(args[2]);
@@ -88,6 +99,17 @@ namespace bootEditor
                 }
                 if (args[0].Contains("-w"))
                 {
+                    if (args[1].Contains("BMZ"))
+                    {
+                        if (args[2].Contains("-t"))
+                        {
+                            Nintendo._3DS.BlasterMasterZero.TEXT.Write(args[3]);
+                        }
+                        if (args[2].Contains("-a"))
+                        {
+                            Nintendo._3DS.BlasterMasterZero.IRARC.Write(args[3]);
+                        }
+                    }
                     if (args[1].Contains("Gangstar"))
                     {
                         FileAttributes attr = File.GetAttributes(args[2]);
@@ -138,7 +160,7 @@ namespace bootEditor
                     }
                 }
             }
-            //IOS.DoomIIRPG.BIN.Write("C:\\Users\\zZz\\source\\repos\\bootEditor\\bin\\Debug\\text_DoomIIRPG-RE");
+            //Nintendo.Switch.LuigisMansion3.TEXT.Read("resarc_en.irlst");
         }
     }
 }

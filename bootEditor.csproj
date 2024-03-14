@@ -48,12 +48,15 @@
     <Compile Include="IOS\DoomIIRPG\BIN.cs" />
     <Compile Include="Java\DoomRPG\BSP.cs" />
     <Compile Include="Java\DoomRPG\STR.cs" />
+    <Compile Include="Nintendo\3DS\BlasterMasterZero\TEXT.cs" />
     <Compile Include="Nintendo\3DS\PMSS\BIN.cs" />
     <Compile Include="Nintendo\3DS\Pokemon\SARC.cs" />
+    <Compile Include="Nintendo\3DS\BlasterMasterZero\IRARC.cs" />
     <Compile Include="Nintendo\DS\BMG\BMG.cs" />
     <Compile Include="Nintendo\DS\Coropata\Coropata.cs" />
     <Compile Include="Nintendo\DS\GangstarVegas\LNG.cs" />
     <Compile Include="Nintendo\Switch\HyruleWarriors\TEXT.cs" />
+    <Compile Include="Nintendo\Switch\LuigisMansion3\TEXT.cs" />
     <Compile Include="PC\JackDaxterLegacy\TXTB.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
