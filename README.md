@@ -11,4 +11,4 @@ Paper Mario Sticker Star (3DS) (arc)
 # Games(formats) with non-full compatibility
 BMG (DS) - Binary Message G(?) - only Extracting 
 # To-do
-Dekotora (DS), Any other games
+Dekotora (DS), other
