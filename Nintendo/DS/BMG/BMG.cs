@@ -1,4 +1,6 @@
-﻿using System;
+﻿using bootEditor.Java.DoomRPG;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -12,97 +14,126 @@ namespace bootEditor.Nintendo.DS.BMG
 {
     internal class BMG
     {
+        public class Data
+        {
+            public string magic { get; set; }
+            public int size { get; set; }
+            public int unk1 { get; set; }
+            public int unk2 { get; set; }
+            public string magicINF { get; set; }
+            public int INFsize { get; set; }
+            public int count { get; set; }
+            public int INFunk { get; set; }
+            public string magicDAT { get; set; }
+            public int DATsize { get; set; }
+            public int[] pos { get; set; }
+            public string[] strings { get; set; }
+
+        }
         public static void Read(string file)
         {
+            Data data = new Data();
             var reader = new BinaryReader(File.OpenRead(file));
-            string magicBMG = Encoding.UTF8.GetString(reader.ReadBytes(8));
-            if (magicBMG != "MESGbmg1")
+            data.magic = Encoding.UTF8.GetString(reader.ReadBytes(8));
+            if (data.magic != "MESGbmg1")
             {
                 throw new Exception("This is not .bmg");
             }
-            int fullSize = reader.ReadInt32();
-            Console.WriteLine($"Magic: {magicBMG}, fullsize: {fullSize}");
-            reader.BaseStream.Position = 0x20;
-            string magicINF1 = Encoding.UTF8.GetString(reader.ReadBytes(4));
-            int INF1Size = reader.ReadInt32() + 0x20;
-            int stringCount = reader.ReadInt16();
-            int[] pos = new int[stringCount];
-            string[] strings = new string[stringCount];
-            Console.WriteLine($"Magic: {magicINF1}, fullsize: {INF1Size}, string count: {stringCount}");
-            reader.BaseStream.Position += 6;
-            for (int i = 0; i < stringCount; i++)
+            data.size = reader.ReadInt32();
+            data.unk1 = reader.ReadInt32();
+            data.unk2 = reader.ReadInt32();
+            Utils.Utils.AlignPosition(reader);
+            Console.WriteLine($"Magic: {data.magic}, fullsize: {data.size}");
+            data.magicINF = Encoding.UTF8.GetString(reader.ReadBytes(4));
+            data.INFsize = reader.ReadInt32();
+            data.count = reader.ReadInt16();
+            data.INFunk = reader.ReadInt32();
+            Utils.Utils.AlignPosition(reader);
+
+            data.pos = new int[data.count];
+            data.strings = new string[data.count];
+            Console.WriteLine($"Magic: {data.magicINF}, fullsize: {data.INFsize}, string count: {data.count}");
+            for (int i = 0; i < data.count; i++)
             {
-                pos[i] = reader.ReadInt32();
+                data.pos[i] = reader.ReadInt32();
             }
-            reader.BaseStream.Position = INF1Size;
-            string magicDAT1 = Encoding.UTF8.GetString(reader.ReadBytes(4));
-            int DAT1Size = reader.ReadInt32();
+            reader.BaseStream.Position = data.INFsize + 0x20;
+            data.magicDAT = Encoding.UTF8.GetString(reader.ReadBytes(4));
+            data.DATsize = reader.ReadInt32();
             var position = reader.BaseStream.Position;
-            for (int i = 0; i < stringCount; i++)
+            for (int i = 0; i < data.count; i++)
             {
                 reader.BaseStream.Position = position;
-                reader.BaseStream.Position += pos[i];
-                strings[i] = Utils.Utils.ReadString(reader, Encoding.Unicode).Replace("\n", "<lf>").Replace("\r", "<br>");
-                if (strings[i] == "")
+                reader.BaseStream.Position += data.pos[i];
+                data.strings[i] = Utils.Utils.ReadString(reader, Encoding.Unicode);
+                if (data.strings[i] == "")
                 {
-                    strings[i] = "<EMPTY>";
+                    data.strings[i] = "<EMPTY>";
                 }
             }
-            File.WriteAllLines(Path.GetFileNameWithoutExtension(file) + ".txt", strings);
-        }
-        public static void Write(string txt)
-        {
-            var withoutExt = Path.GetFileNameWithoutExtension(txt);
-            string[] strings = File.ReadAllLines(txt);
-            int count = strings.Length;
-            int[] pointers = new int[count];
-            var reader = new BinaryReader(File.OpenRead(withoutExt + ".bmg"));
-            string magicBMG = Encoding.UTF8.GetString(reader.ReadBytes(8));
-            if (magicBMG != "MESGbmg1")
-            {
-                throw new Exception("This is not .bmg");
-            }
-            int position = 0;
-            byte[] bytesToSearch = { 0x53, 0x41, 0x52, 0x43 };
-            // Открываем бинарный файл для чтения в байтовом режиме
-            byte[] fileBytes = new byte[reader.BaseStream.Length];
-            reader.Read(fileBytes, 0, fileBytes.Length);
-            // Выполняем поиск указанных байтов
-            position = Utils.Utils.FindBytes(fileBytes, bytesToSearch);
+            string json = JsonConvert.SerializeObject(data, Formatting.Indented);
+            File.WriteAllText(Path.GetFileNameWithoutExtension(file) + ".json", json);
 
-            if (position >= 0)
+        }
+        public static void Write(string json)
+        {
+            string jsonT = File.ReadAllText(json);
+            Data data = JsonConvert.DeserializeObject<Data>(jsonT);
+            var writer = new BinaryWriter(File.Create(Path.GetFileNameWithoutExtension(json) + ".bmg"));
+            writer.Write(Encoding.UTF8.GetBytes(data.magic));
+            writer.Write(new byte[4]);
+            writer.Write(data.unk1);
+            writer.Write(data.unk2);
+            Utils.Utils.AlignPosition(writer, 0x10);
+            writer.Write(Encoding.UTF8.GetBytes(data.magicINF));
+            writer.Write(data.INFsize);
+            writer.Write((short)data.count);
+            writer.Write(data.INFunk);
+            Utils.Utils.AlignPosition(writer, 0x10);
+            writer.Write(new byte[data.count * 4]);
+            Utils.Utils.AlignPosition(writer, 0x10);
+            writer.Write(Encoding.UTF8.GetBytes(data.magicDAT));
+            writer.Write(new byte[4]);
+            var pos = writer.BaseStream.Position;
+            for (int i = 0; i < data.count; i++)
             {
-                Console.WriteLine("Block  DAT1 was finded on position ", position);
-            }
-            else
-            {
-                Console.WriteLine("Байты не найдены");
-            }
-            position += 8;
-            reader.Close();
-            var writer = new BinaryWriter(File.OpenWrite(withoutExt + ".bmg"));
-            writer.BaseStream.Position = position;
-            for (int i = 0; i < count; i++)
-            {
-                strings[i] = strings[i].Replace("<lf>", "\n").Replace("<br>", "\r");
-                if (strings[i] == "<EMPTY>")
+                if (writer.BaseStream.Position - pos == 0)
                 {
-                    pointers[i] = (int)writer.BaseStream.Position - position;
-                    writer.Write(new byte());
+                    writer.Write(new byte[2]);
+                    data.pos[i] = (int)writer.BaseStream.Position - (int)pos;
+                    if (data.strings[i] == "<EMPTY>")
+                    {
+                        writer.Write(new byte[2]);
+                    }
+                    else
+                    {
+                        writer.Write(Encoding.Unicode.GetBytes(data.strings[i]));
+                        writer.Write(new byte[2]);
+                    }
                 }
                 else
                 {
-                    pointers[i] = (int)writer.BaseStream.Position - position;
-                    writer.Write(Encoding.Unicode.GetBytes(strings[i]));
-                    writer.Write(new byte());
+                    data.pos[i] = (int)writer.BaseStream.Position - (int)pos;
+                    if (data.strings[i] == "<EMPTY>")
+                    {
+                        writer.Write(new byte[2]);
+                    }
+                    else
+                    {
+                        writer.Write(Encoding.Unicode.GetBytes(data.strings[i]));
+                        writer.Write(new byte[2]);
+                    }
                 }
             }
-            writer.BaseStream.Position = 0x28;
-            writer.Write((int)count);
-            writer.BaseStream.Position += 6;
-            for (int i = 0; i < count; i++)
+            Utils.Utils.AlignPosition(writer, 0x10);
+            writer.BaseStream.Position = data.magic.Length;
+            writer.Write(writer.BaseStream.Length);
+            writer.BaseStream.Position = data.INFsize + 0x24;
+            writer.Write((int)writer.BaseStream.Length - data.INFsize + 0x20);
+            writer.BaseStream.Position = 0x30;
+            for (int i = 0; i < data.count; i++)
             {
-                writer.Write((int)pointers[i]);
+                writer.Write(data.pos[i]);
             }
         }
     }

@@ -65,5 +65,53 @@ namespace bootEditor.Nintendo._3DS.BlasterMasterZero
             }
             File.WriteAllLines(Path.GetFileNameWithoutExtension(file) + ".txt", strings);
         }
+        public static void Write(string text)
+        {
+            string noExt = Path.GetFileNameWithoutExtension(text);
+            string[] strings = File.ReadAllLines(text);
+            var reader = new BinaryReader(File.OpenRead(noExt + ".bin"));
+            reader.BaseStream.Position = 0x24;
+            int count = reader.ReadInt32();
+            int[] pointers = new int[count];
+            for (int i = 0; i < count; i++)
+            {
+                reader.ReadInt32();
+            }
+            var pos = reader.BaseStream.Position;
+            if (count != strings.Length)
+            {
+                Console.WriteLine($"In {noExt + ".txt"} more lines in the file than in the {noExt + ".bin"} file");
+            }
+            else
+            {
+                reader.Close();
+            }
+            var writer = new BinaryWriter(File.OpenWrite(noExt + ".bin"));
+            writer.BaseStream.Position = pos;
+            for (int i = 0; i < count; i++)
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(strings[i].Replace("<br>", "\r").Replace("<END>", "\u001d\u001e\u001f").Replace("<START>", "\"\u0011!").Replace("<DIALOG>", "\u0013").Replace("<next>", "\u001d\u001e").Replace("<lf>", "\u001d").Replace("<11>", "\u0011").Replace("<01>", "\u0001"));
+                for (int a = 0; a < bytes.Length; a++)
+                {
+                    if (bytes[a] == 0x20)
+                    {
+                        bytes[a] = 0x5F;
+                    }
+                    else
+                    {
+                        bytes[a] -= 0x21;
+                    }
+                }
+                pointers[i] = (int)writer.BaseStream.Position - (int)pos;
+                writer.Write(bytes);
+            }
+            writer.BaseStream.Position = 0x10;
+            writer.Write((int)writer.BaseStream.Length - 0x14);
+            writer.BaseStream.Position = 0x28;
+            for (int i = 0; i < count; i++)
+            {
+                writer.Write(pointers[i]);
+            }
+        }
     }
 }

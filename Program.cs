@@ -12,11 +12,18 @@ namespace bootEditor
 {
     internal class Program
     {
+        //Оставь надежду, всяк сюда входящий.
+        //Как говорил один мой знакомый:
+        //"Через месяц весь код, который
+        //я написал, становится чужим. А
+        //после нового года моя память
+        //стирается, и приходится учить
+        //шарп заново".
         static void Main(string[] args)
         {
             if (args.Length == 0)
             {
-                Console.WriteLine("USAGE: Tool.exe {-e(extract) or -w(write)} {game or format of file} {gamefile}\nSupported Games:\nBlaster Master Zero (3DS)(TEXT, ARC) (Command - BMZ. TEXT -t, ARC -a (file.irarc file.irlst))\nPaper Mario Sticker Star (3DS)(BIN-image archive) (Command - PMSS)\nCoropata (DS) (Command - Coropata)\nGangstar Vegas (DS) (Command - Gangstar)\nDoomRPG (Java(STR), Brew(BSP)) (Command - DoomRPG)\nDoom II RPG (IOS) (Command - DoomIIRPG)\nJack and Daxter: The precursor Legacy (PC, PS2, PSV) (Command - Legacy)\nHyrule Warriors: Age of Calamity (NSW) (Command - HyruleCalamity)\nSupported files:\nBMG\n");
+                Console.WriteLine("USAGE: Tool.exe {-e(extract) or -w(write)} {game or format of file} {gamefile}\nSupported Games:\nBlaster Master Zero (3DS)(TEXT, ARC) (Command - BMZ. TEXT -t, ARC -a (file.irarc file.irlst))\nPaper Mario Sticker Star (3DS)(BIN-image archive) (Command - PMSS)\nCoropata (DS) (Command - Coropata)\nGangstar Vegas (DS) (Command - Gangstar)\nDoomRPG (Java(STR), Brew(BSP)) (Command - DoomRPG (if brew point the after DoomRPG -b))\nDoom II RPG (IOS) (Command - DoomIIRPG)\nJack and Daxter: The precursor Legacy (PC, PS2, PSV) (Command - Legacy)\nHyrule Warriors: Age of Calamity (NSW) (Command - HyruleCalamity)\nSupported files:\nBMG (DS) (Full Support)\n");
                 Console.ReadKey();
             }
             else
@@ -31,7 +38,16 @@ namespace bootEditor
                         }
                         if (args[2].Contains("-a"))
                         {
-                            Nintendo._3DS.BlasterMasterZero.IRARC.Read(args[3], args[4]);
+                            if (args[3].Contains(".irlst"))
+                            {
+                                Nintendo._3DS.BlasterMasterZero.IRARC.Read(args[3].Replace(".irlst", ".irarc"), args[3]);
+                                return;
+                            }
+                            else
+                            {
+                                Nintendo._3DS.BlasterMasterZero.IRARC.Read(args[3], args[3].Replace(".irarc", ".irlst"));
+                                return;
+                            }
                         }
                     }
                     if (args[1].Contains("PMSS"))
@@ -78,6 +94,10 @@ namespace bootEditor
                         {
                             Java.DoomRPG.BSP.Read(args[2]);
                         }
+                        if (args[2].Contains(".db"))
+                        {
+                            Java.DoomRPG.DB.Read(args[2]);
+                        }
                     }
                     if (args[1].Contains("DoomIIRPG"))
                     {
@@ -99,6 +119,10 @@ namespace bootEditor
                 }
                 if (args[0].Contains("-w"))
                 {
+                    if (args[1].Contains("BMG"))
+                    {
+                        Nintendo.DS.BMG.BMG.Write(args[3]);
+                    }
                     if (args[1].Contains("BMZ"))
                     {
                         if (args[2].Contains("-t"))
@@ -137,11 +161,13 @@ namespace bootEditor
                         {
                             Java.DoomRPG.STR.Write(args[2]);
                         }
-                        if (args[2].Contains("level01") || args[2].Contains("level02") || args[2].Contains("level03") || args[2].Contains("level04") || args[2].Contains("level05") || args[2].Contains("level06") || args[2].Contains("level07") || args[2].Contains("reactor") || args[2].Contains("junction") || args[2].Contains("intro") || args[2].Contains("junction_destroyed"))
+                        if (args[2].Contains("-b"))
                         {
-                            Console.WriteLine("WARNING: file.bsp need to be in the one folder with file.txt and have one name, but \".bsp\" extension");
-                            Java.DoomRPG.BSP.Write(args[2]);
-                            
+                            Java.DoomRPG.BSP.Write(args[3]);
+                        }
+                        if (args[2].Contains(".json"))
+                        {
+                            Java.DoomRPG.DB.Write(args[2]);
                         }
                     }
                     if (args[1].Contains("DoomIIRPG"))
@@ -160,7 +186,8 @@ namespace bootEditor
                     }
                 }
             }
-            //Nintendo.Switch.LuigisMansion3.TEXT.Read("resarc_en.irlst");
+            //Nintendo.DS.OrcsElves.ARC.Read("UI_Shapes.bin", "UI_Shape_Offset.bin");
+            //Java.DoomRPG.BSP.Write("level01.json");
         }
     }
 }

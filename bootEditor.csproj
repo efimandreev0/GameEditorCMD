@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,6 +50,7 @@
   <ItemGroup>
     <Compile Include="IOS\DoomIIRPG\BIN.cs" />
     <Compile Include="Java\DoomRPG\BSP.cs" />
+    <Compile Include="Java\DoomRPG\DB.cs" />
     <Compile Include="Java\DoomRPG\STR.cs" />
     <Compile Include="Nintendo\3DS\BlasterMasterZero\TEXT.cs" />
     <Compile Include="Nintendo\3DS\PMSS\BIN.cs" />
@@ -55,8 +59,10 @@
     <Compile Include="Nintendo\DS\BMG\BMG.cs" />
     <Compile Include="Nintendo\DS\Coropata\Coropata.cs" />
     <Compile Include="Nintendo\DS\GangstarVegas\LNG.cs" />
+    <Compile Include="Nintendo\DS\OrcsElves\ARC.cs" />
     <Compile Include="Nintendo\Switch\HyruleWarriors\TEXT.cs" />
     <Compile Include="Nintendo\Switch\LuigisMansion3\TEXT.cs" />
+    <Compile Include="Nintendo\Switch\Sentinels\FMSB.cs" />
     <Compile Include="PC\JackDaxterLegacy\TXTB.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,11 +81,9 @@
     <Compile Include="Nintendo\3DS\SMDH\SMDH.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="packages\Magick.NET-Q16-AnyCPU.13.6.0\build\netstandard20\Magick.NET-Q16-AnyCPU.targets" Condition="Exists('packages\Magick.NET-Q16-AnyCPU.13.6.0\build\netstandard20\Magick.NET-Q16-AnyCPU.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\Magick.NET-Q16-AnyCPU.13.6.0\build\netstandard20\Magick.NET-Q16-AnyCPU.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Magick.NET-Q16-AnyCPU.13.6.0\build\netstandard20\Magick.NET-Q16-AnyCPU.targets'))" />
   </Target>
 </Project>
