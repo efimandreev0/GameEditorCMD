@@ -7,8 +7,6 @@
  - Hyrule Warriors: Age of Calamity (NSW) (Text)
  - Blaster Master Zero (3DS) (Text, arc)
  - Paper Mario Sticker Star (3DS) (arc)
-
-# Games(formats) with non-full compatibility
- - BMG (DS) - Binary Message G(?) - only Extracting 
+ - BMG (DS) - Binary Message G(?) (Full Supported)
 # To-do
  - Dekotora (DS), other
