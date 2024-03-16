@@ -47,7 +47,7 @@ namespace bootEditor.Nintendo.Switch.Sentinels
             string json = JsonConvert.SerializeObject(data, Formatting.Indented);
             File.WriteAllText(Path.GetFileNameWithoutExtension(file) + ".json", json);
         }
-        public static void write(string json)
+        public static void Write(string json)
         {
             string jsonT = File.ReadAllText(json);
             Data data = JsonConvert.DeserializeObject<Data>(jsonT);

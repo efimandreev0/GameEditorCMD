@@ -21,7 +21,7 @@ namespace bootEditor
         //шарп заново".
         static void Main(string[] args)
         {
-            /*if (args.Length == 0)
+            if (args.Length == 0)
             {
                 Console.WriteLine("USAGE: Tool.exe {-e(extract) or -w(write)} {game or format of file} {gamefile}\n" +
                     "\n" +
@@ -30,19 +30,48 @@ namespace bootEditor
                     "Paper Mario Sticker Star (3DS) (BIN-image archive) (Command - PMSS)\n" +
                     "Coropata (DS) (Command - Coropata)\n" +
                     "Gangstar Vegas (DS) (Command - Gangstar)\n" +
-                    "DoomRPG (Java(STR), Brew(BSP)) (Command - DoomRPG (if brew point the after DoomRPG -b))\n" +
+                    "DoomRPG (Java(STR), Brew(BSP)) (Command - DoomRPG (if brew-version point the after DoomRPG -b))\n" +
                     "Doom II RPG (IOS) (Command - DoomIIRPG)\n" +
                     "Jack and Daxter: The precursor Legacy (PC, PS2, PSV) (Command - Legacy)\n" +
-                    "Hyrule Warriors: Age of Calamity (NSW) (Command - HyruleCalamity)\n" +
+                    "Hyrule Warriors: Age of Calamity (NSW) (Command - HyruleCalamity)\n" + "" +
+                    "Luigi's Mansion 3 (NSW) (TEXT -t) (ARC -a) (Command - LM3)" +
+                    "13 Sentinels: Aegis Rim (NSW, PS4) (TEXT) (Command - SENT)" +
+                    "Unicorn Overlord (NSW, PS4, PS5, Series X/S) (TEXT) (Command - SENT)" +
                     "\n" +
-                    "Supported files:\nB" +
-                    "MG (DS) (Full Support)\n");
+                    "Supported files:\n" +
+                    "BMG (DS) (Full Support)\n");
                 Console.ReadKey();
             }
             else
             {
                 if (args[0].Contains("-e"))
                 {
+                    if (args[1].Contains("SENT"))
+                    {
+                        Nintendo.Switch.Sentinels.FMSB.Read(args[2]);
+                    }
+                    if (args[1].Contains("LM3"))
+                    {
+                        if (args[2].Contains("-t"))
+                        {
+                            Nintendo.Switch.LuigisMansion3.TEXT.Read(args[3]);
+                        }
+                        if (args[2].Contains("-a"))
+                        {
+                            if (args[3].Contains(".dict"))
+                            {
+                                Nintendo.Switch.LuigisMansion3.ARC.Read(Path.GetFileNameWithoutExtension(args[3]) + ".data", args[3]);
+                            }
+                            if (args[3].Contains(".data"))
+                            {
+                                Nintendo.Switch.LuigisMansion3.ARC.Read(args[3], Path.GetFileNameWithoutExtension(args[3]) + ".dict");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Please get tool init.dict or init.data");
+                            }
+                        }
+                    }
                     if (args[1].Contains("BMZ"))
                     {
                         if (args[2].Contains("-t"))
@@ -129,12 +158,48 @@ namespace bootEditor
                     {
                         Nintendo.Switch.HyruleWarriors.TEXT.Read(args[2]);
                     }
-                }
-                if (args[0].Contains("-w"))
-                {
+                    if (args[0].Contains("-w"))
+                    {
+                        if (args[1].Contains("SENT"))
+                        {
+                            if (args[2].Contains(".json"))
+                            {
+                                Nintendo.Switch.Sentinels.FMSB.Write(args[2]);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Please get tool file.json");
+                            }
+                        }
+                    }
+                    if (args[1].Contains("LM3"))
+                    {
+                        if (args[2].Contains("-t"))
+                        {
+                            if (args[3].Contains(".json"))
+                            {
+                                Nintendo.Switch.LuigisMansion3.TEXT.Write(args[3]);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Please get tool file.json");
+                            }
+                        }
+                        if (args[2].Contains("-a"))
+                        {
+                            Nintendo.Switch.LuigisMansion3.ARC.Write(args[3]);
+                        }
+                    }
                     if (args[1].Contains("BMG"))
                     {
-                        Nintendo.DS.BMG.BMG.Write(args[3]);
+                        if (args[2].Contains(".json"))
+                        {
+                            Nintendo.DS.BMG.BMG.Write(args[2]);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Get tool file.json");
+                        }
                     }
                     if (args[1].Contains("BMZ"))
                     {
@@ -198,10 +263,9 @@ namespace bootEditor
                         Nintendo.Switch.HyruleWarriors.TEXT.Write(args[2]);
                     }
                 }
-            }*/
+            }
             //Nintendo.DS.OrcsElves.ARC.Read("UI_Shapes.bin", "UI_Shape_Offset.bin");
             //Java.DoomRPG.BSP.Write("level01.json");
-            Nintendo.Switch.LuigisMansion3.ARC.Write("init");
         }
     }
 }
