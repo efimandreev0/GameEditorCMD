@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Brotli.Core, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Brotli.NET.2.1.1\lib\net45\Brotli.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -61,6 +64,7 @@
     <Compile Include="Nintendo\DS\GangstarVegas\LNG.cs" />
     <Compile Include="Nintendo\DS\OrcsElves\ARC.cs" />
     <Compile Include="Nintendo\Switch\HyruleWarriors\TEXT.cs" />
+    <Compile Include="Nintendo\Switch\LuigisMansion3\ARC.cs" />
     <Compile Include="Nintendo\Switch\LuigisMansion3\TEXT.cs" />
     <Compile Include="Nintendo\Switch\Sentinels\FMSB.cs" />
     <Compile Include="PC\JackDaxterLegacy\TXTB.cs" />
@@ -85,5 +89,7 @@
     <PropertyGroup>
       <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
     </PropertyGroup>
+    <Error Condition="!Exists('packages\Brotli.NET.2.1.1\build\Brotli.NET.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Brotli.NET.2.1.1\build\Brotli.NET.targets'))" />
   </Target>
+  <Import Project="packages\Brotli.NET.2.1.1\build\Brotli.NET.targets" Condition="Exists('packages\Brotli.NET.2.1.1\build\Brotli.NET.targets')" />
 </Project>

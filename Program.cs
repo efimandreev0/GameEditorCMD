@@ -21,9 +21,22 @@ namespace bootEditor
         //шарп заново".
         static void Main(string[] args)
         {
-            if (args.Length == 0)
+            /*if (args.Length == 0)
             {
-                Console.WriteLine("USAGE: Tool.exe {-e(extract) or -w(write)} {game or format of file} {gamefile}\nSupported Games:\nBlaster Master Zero (3DS)(TEXT, ARC) (Command - BMZ. TEXT -t, ARC -a (file.irarc file.irlst))\nPaper Mario Sticker Star (3DS)(BIN-image archive) (Command - PMSS)\nCoropata (DS) (Command - Coropata)\nGangstar Vegas (DS) (Command - Gangstar)\nDoomRPG (Java(STR), Brew(BSP)) (Command - DoomRPG (if brew point the after DoomRPG -b))\nDoom II RPG (IOS) (Command - DoomIIRPG)\nJack and Daxter: The precursor Legacy (PC, PS2, PSV) (Command - Legacy)\nHyrule Warriors: Age of Calamity (NSW) (Command - HyruleCalamity)\nSupported files:\nBMG (DS) (Full Support)\n");
+                Console.WriteLine("USAGE: Tool.exe {-e(extract) or -w(write)} {game or format of file} {gamefile}\n" +
+                    "\n" +
+                    "Supported Games:\n" +
+                    "Blaster Master Zero (3DS)(TEXT, ARC) (Command - BMZ. TEXT -t, ARC -a (file.irarc file.irlst))\n" +
+                    "Paper Mario Sticker Star (3DS) (BIN-image archive) (Command - PMSS)\n" +
+                    "Coropata (DS) (Command - Coropata)\n" +
+                    "Gangstar Vegas (DS) (Command - Gangstar)\n" +
+                    "DoomRPG (Java(STR), Brew(BSP)) (Command - DoomRPG (if brew point the after DoomRPG -b))\n" +
+                    "Doom II RPG (IOS) (Command - DoomIIRPG)\n" +
+                    "Jack and Daxter: The precursor Legacy (PC, PS2, PSV) (Command - Legacy)\n" +
+                    "Hyrule Warriors: Age of Calamity (NSW) (Command - HyruleCalamity)\n" +
+                    "\n" +
+                    "Supported files:\nB" +
+                    "MG (DS) (Full Support)\n");
                 Console.ReadKey();
             }
             else
@@ -185,9 +198,10 @@ namespace bootEditor
                         Nintendo.Switch.HyruleWarriors.TEXT.Write(args[2]);
                     }
                 }
-            }
+            }*/
             //Nintendo.DS.OrcsElves.ARC.Read("UI_Shapes.bin", "UI_Shape_Offset.bin");
             //Java.DoomRPG.BSP.Write("level01.json");
+            Nintendo.Switch.LuigisMansion3.ARC.Write("init");
         }
     }
 }

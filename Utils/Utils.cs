@@ -4,12 +4,13 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Brotli;
 
 namespace bootEditor.Utils
 {
     public static class Utils
     {
+        
         public static int FindBytes(byte[] fileBytes, byte[] bytesToSearch)
         {
             int maxPosition = fileBytes.Length - bytesToSearch.Length;
@@ -123,13 +124,38 @@ namespace bootEditor.Utils
         public static byte[] DecompressZlib(byte[] data)
         {
             using (var compressedStream = new MemoryStream(data))
-            using (var zipStream = new GZipStream(compressedStream, CompressionMode.Decompress))
+            using (var zipStream = new GZipStream(compressedStream, System.IO.Compression.CompressionMode.Decompress))
             using (var resultStream = new MemoryStream())
             {
                 zipStream.CopyTo(resultStream);
                 return resultStream.ToArray();
             }
         }
+        public static byte[] CompressBytes(byte[] inputBytes)
+        {
+            byte[] compressedBytes;
+
+            using (MemoryStream outputStream = new MemoryStream())
+            {
+                using (BrotliStream brotliStream = new BrotliStream(outputStream, System.IO.Compression.CompressionMode.Compress))
+                {
+                    brotliStream.Write(inputBytes, 0, inputBytes.Length);
+                }
+
+                compressedBytes = outputStream.ToArray();
+            }
+
+            return compressedBytes;
+        }
+
+        public static string[] SortNames(string[] names)
+        {
+            // Используем метод Array.Sort для сортировки массива имен
+            Array.Sort(names, StringComparer.InvariantCultureIgnoreCase);
+            return names;
+        }
+
+
         public static string Reverse(string s)
         {
             char[] charArray = s.ToCharArray();
