@@ -7,6 +7,9 @@
  - Hyrule Warriors: Age of Calamity (NSW) (Text)
  - Blaster Master Zero (3DS) (Text, arc)
  - Paper Mario Sticker Star (3DS) (arc)
+ - Luigi's Mansion 3 (NSW) (Text, arc)
+ - 13 Sentinels: Aegis Rim (Text)
+ - Unicorn Overlord (Text)
  - BMG (DS) - Binary Message G(?) (Full Supported)
 # To-do
  - Dekotora (DS), other
